@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meu Jardim de Produtividade</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --verde-escuro: #2d4a3e;
+    --verde-medio: #4a7c68;
+    --verde-claro: #7fb89a;
+    --verde-suave: #b8d4c4;
+    --verde-palido: #deeee6;
+    --bege-escuro: #8a7660;
+    --bege-medio: #c4ad92;
+    --bege-claro: #e8dcc8;
+    --bege-palido: #f7f2ea;
+    --creme: #faf7f2;
+    --terra: #a0785a;
+    --laranja-suave: #e8a87c;
+    --branco: #ffffff;
+    --texto-escuro: #2a3628;
+    --texto-medio: #5a6b5e;
+    --texto-claro: #8a9e8e;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--creme);
+    color: var(--texto-escuro);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── FUNDO ORGÂNICO ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 10% 20%, rgba(127,184,154,0.18) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 90% 80%, rgba(196,173,146,0.15) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 50% at 50% 50%, rgba(222,238,230,0.12) 0%, transparent 70%);
+    pointer-events: none; z-index: 0;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: relative; z-index: 10;
+    padding: 28px 24px 0;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .header-tag {
+    font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase;
+    color: var(--verde-medio); font-weight: 500;
+  }
+  .header-titulo {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px; color: var(--verde-escuro); line-height: 1.2;
+  }
+  .header-sub {
+    font-size: 13px; color: var(--texto-claro); margin-top: 2px;
+  }
+  .header-data {
+    margin-top: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .data-pill {
+    background: var(--verde-palido);
+    border: 1px solid var(--verde-suave);
+    border-radius: 20px; padding: 5px 14px;
+    font-size: 12px; color: var(--verde-escuro); font-weight: 500;
+  }
+  .energia-pill {
+    background: var(--bege-claro);
+    border: 1px solid var(--bege-medio);
+    border-radius: 20px; padding: 5px 14px;
+    font-size: 12px; color: var(--bege-escuro); font-weight: 500;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .energia-pill:hover { background: var(--bege-medio); color: var(--branco); }
+
+  /* ── NAVEGAÇÃO ── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    padding: 16px 24px 0;
+    background: linear-gradient(to bottom, var(--creme) 80%, transparent);
+  }
+  .nav-scroll {
+    display: flex; gap: 8px; overflow-x: auto;
+    padding-bottom: 12px; scrollbar-width: none;
+  }
+  .nav-scroll::-webkit-scrollbar { display: none; }
+  .nav-btn {
+    flex-shrink: 0;
+    background: var(--branco); border: 1.5px solid var(--verde-suave);
+    border-radius: 22px; padding: 8px 18px;
+    font-family: 'DM Sans', sans-serif; font-size: 13px;
+    color: var(--texto-medio); cursor: pointer;
+    transition: all 0.25s ease; white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(45,74,62,0.06);
+  }
+  .nav-btn.ativo {
+    background: var(--verde-escuro); border-color: var(--verde-escuro);
+    color: var(--branco);
+    box-shadow: 0 4px 16px rgba(45,74,62,0.25);
+  }
+  .nav-btn:hover:not(.ativo) {
+    background: var(--verde-palido); border-color: var(--verde-claro);
+    color: var(--verde-escuro);
+  }
+
+  /* ── CONTEÚDO ── */
+  main { padding: 0 24px 100px; position: relative; z-index: 1; }
+
+  .secao { display: none; }
+  .secao.ativa { display: block; animation: fadeUp 0.4s ease; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--branco);
+    border-radius: 20px; padding: 20px;
+    margin-top: 16px;
+    box-shadow: 0 2px 12px rgba(45,74,62,0.07);
+    border: 1px solid rgba(127,184,154,0.2);
+    position: relative; overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--verde-claro), var(--bege-medio));
+    border-radius: 20px 20px 0 0;
+  }
+  .card-titulo {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px; color: var(--verde-escuro);
+    margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+  }
+  .card-icon {
+    width: 32px; height: 32px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0;
+  }
+
+  /* ── LINHA DE TAREFA ── */
+  .tarefa-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 12px 0; border-bottom: 1px solid var(--verde-palido);
+    transition: all 0.2s;
+  }
+  .tarefa-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .tarefa-check {
+    width: 22px; height: 22px; border-radius: 50%;
+    border: 2px solid var(--verde-suave); flex-shrink: 0;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s; margin-top: 1px;
+  }
+  .tarefa-check.marcado {
+    background: var(--verde-medio); border-color: var(--verde-medio);
+    color: white; font-size: 12px;
+  }
+  .tarefa-check:hover:not(.marcado) { border-color: var(--verde-medio); background: var(--verde-palido); }
+  .tarefa-texto { flex: 1; }
+  .tarefa-nome {
+    font-size: 14px; color: var(--texto-escuro); font-weight: 500;
+    transition: all 0.2s;
+  }
+  .tarefa-nome.riscado { text-decoration: line-through; color: var(--texto-claro); }
+  .tarefa-meta { font-size: 11px; color: var(--texto-claro); margin-top: 2px; }
+  .tarefa-badge {
+    font-size: 10px; padding: 2px 8px; border-radius: 10px;
+    font-weight: 500; flex-shrink: 0; margin-top: 2px;
+  }
+  .badge-trabalho { background: var(--verde-palido); color: var(--verde-escuro); }
+  .badge-casa     { background: var(--bege-claro);   color: var(--bege-escuro); }
+  .badge-saude    { background: #fde8d8; color: #a0533a; }
+  .badge-estudos  { background: #e8eaf6; color: #3949ab; }
+
+  /* ── ROTINA ── */
+  .rotina-item {
+    display: flex; gap: 14px; padding: 14px 0;
+    border-bottom: 1px solid var(--verde-palido);
+    position: relative;
+  }
+  .rotina-item:last-child { border-bottom: none; }
+  .rotina-hora {
+    font-size: 11px; color: var(--texto-claro); font-weight: 500;
+    min-width: 68px; padding-top: 2px; line-height: 1.4;
+  }
+  .rotina-linha {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 0;
+  }
+  .rotina-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--verde-claro); flex-shrink: 0; margin-top: 4px;
+    border: 2px solid var(--branco);
+    box-shadow: 0 0 0 2px var(--verde-claro);
+  }
+  .rotina-linha-v {
+    width: 1px; flex: 1; background: var(--verde-palido); min-height: 20px;
+  }
+  .rotina-corpo { flex: 1; }
+  .rotina-ativ {
+    font-size: 14px; font-weight: 500; color: var(--texto-escuro);
+    line-height: 1.3;
+  }
+  .rotina-detalhe { font-size: 12px; color: var(--texto-claro); margin-top: 3px; }
+  .rotina-cor-saude   .rotina-dot { background: #e8a87c; box-shadow: 0 0 0 2px #e8a87c; }
+  .rotina-cor-trabalho .rotina-dot { background: var(--verde-medio); box-shadow: 0 0 0 2px var(--verde-medio); }
+  .rotina-cor-estudos .rotina-dot { background: #8c7bb5; box-shadow: 0 0 0 2px #8c7bb5; }
+
+  /* ── HÁBITOS ── */
+  .habito-card {
+    background: var(--branco); border-radius: 16px; padding: 16px 18px;
+    margin-top: 12px;
+    box-shadow: 0 2px 10px rgba(45,74,62,0.06);
+    border: 1px solid rgba(127,184,154,0.18);
+  }
+  .habito-topo {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 12px;
+  }
+  .habito-nome { font-size: 14px; font-weight: 500; color: var(--texto-escuro); }
+  .habito-pct  { font-size: 13px; font-weight: 600; color: var(--verde-escuro); }
+  .dias-row {
+    display: flex; gap: 6px; justify-content: space-between;
+  }
+  .dia-btn {
+    flex: 1; aspect-ratio: 1;
+    border-radius: 10px; border: 1.5px solid var(--verde-palido);
+    background: var(--creme); cursor: pointer;
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center; gap: 2px;
+    transition: all 0.2s; font-size: 10px; color: var(--texto-claro);
+    font-family: 'DM Sans', sans-serif;
+  }
+  .dia-btn .dia-label { font-size: 9px; }
+  .dia-btn.feito {
+    background: var(--verde-medio); border-color: var(--verde-medio);
+    color: white;
+  }
+  .dia-btn.nao-feito {
+    background: #fde8e8; border-color: #f0b8b8;
+    color: #c0605a;
+  }
+  .dia-btn:hover:not(.feito):not(.nao-feito) {
+    border-color: var(--verde-claro); background: var(--verde-palido);
+  }
+  .barra-progresso {
+    height: 5px; border-radius: 10px;
+    background: var(--verde-palido); margin-top: 12px; overflow: hidden;
+  }
+  .barra-fill {
+    height: 100%; border-radius: 10px;
+    background: linear-gradient(90deg, var(--verde-claro), var(--verde-medio));
+    transition: width 0.5s ease;
+  }
+
+  /* ── ESTUDOS ── */
+  .estudo-card {
+    background: var(--branco); border-radius: 16px;
+    margin-top: 12px; overflow: hidden;
+    box-shadow: 0 2px 10px rgba(45,74,62,0.06);
+    border: 1px solid rgba(127,184,154,0.18);
+  }
+  .estudo-cabecalho {
+    padding: 14px 18px 10px;
+    display: flex; align-items: flex-start; gap: 12px;
+  }
+  .estudo-icone {
+    width: 40px; height: 40px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; flex-shrink: 0;
+  }
+  .estudo-info { flex: 1; }
+  .estudo-titulo { font-size: 14px; font-weight: 500; color: var(--texto-escuro); }
+  .estudo-sub { font-size: 12px; color: var(--texto-claro); margin-top: 2px; }
+  .estudo-rodape {
+    padding: 10px 18px 14px;
+    border-top: 1px solid var(--verde-palido);
+  }
+  .estudo-barra { height: 6px; border-radius: 10px; background: var(--verde-palido); overflow: hidden; }
+  .estudo-fill  { height: 100%; border-radius: 10px; transition: width 0.6s ease; }
+  .estudo-nums  { display: flex; justify-content: space-between; margin-top: 6px; font-size: 11px; color: var(--texto-claro); }
+
+  /* ── ADICIONAR TAREFA ── */
+  .add-form {
+    background: var(--branco); border-radius: 20px; padding: 18px;
+    margin-top: 16px; box-shadow: 0 2px 12px rgba(45,74,62,0.07);
+    border: 1.5px dashed var(--verde-suave);
+  }
+  .add-input {
+    width: 100%; border: none; outline: none; background: var(--verde-palido);
+    border-radius: 12px; padding: 12px 16px; font-size: 14px;
+    font-family: 'DM Sans', sans-serif; color: var(--texto-escuro);
+    margin-bottom: 10px;
+  }
+  .add-input::placeholder { color: var(--texto-claro); }
+  .add-row { display: flex; gap: 8px; }
+  .add-select {
+    flex: 1; border: 1.5px solid var(--verde-palido); border-radius: 10px;
+    padding: 8px 10px; font-size: 12px;
+    font-family: 'DM Sans', sans-serif; color: var(--texto-medio);
+    background: var(--creme); outline: none; cursor: pointer;
+  }
+  .add-btn {
+    background: var(--verde-escuro); color: white; border: none;
+    border-radius: 10px; padding: 8px 16px; font-size: 13px;
+    font-family: 'DM Sans', sans-serif; cursor: pointer;
+    transition: all 0.2s; font-weight: 500;
+  }
+  .add-btn:hover { background: var(--verde-medio); }
+
+  /* ── EVOLUÇÃO ── */
+  .evolucao-semana {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+    margin-top: 4px;
+  }
+  .evo-card {
+    background: var(--branco); border-radius: 14px; padding: 14px 12px;
+    text-align: center; border: 1px solid rgba(127,184,154,0.2);
+    box-shadow: 0 2px 8px rgba(45,74,62,0.05);
+  }
+  .evo-num { font-family: 'Playfair Display', serif; font-size: 24px; color: var(--verde-escuro); }
+  .evo-label { font-size: 10px; color: var(--texto-claro); margin-top: 2px; }
+
+  .skill-item {
+    padding: 14px 0; border-bottom: 1px solid var(--verde-palido);
+  }
+  .skill-item:last-child { border-bottom: none; }
+  .skill-topo { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .skill-nome { font-size: 14px; font-weight: 500; color: var(--texto-escuro); }
+  .skill-nivel { font-size: 12px; color: var(--texto-claro); }
+  .skill-barra { height: 6px; border-radius: 10px; background: var(--bege-claro); overflow: hidden; }
+  .skill-fill { height: 100%; border-radius: 10px; background: linear-gradient(90deg, var(--bege-medio), var(--terra)); transition: width 0.6s ease; }
+
+  /* ── FAB ── */
+  .fab {
+    position: fixed; bottom: 28px; right: 24px; z-index: 200;
+    width: 54px; height: 54px; border-radius: 50%;
+    background: var(--verde-escuro); color: white; border: none;
+    font-size: 24px; cursor: pointer;
+    box-shadow: 0 6px 20px rgba(45,74,62,0.35);
+    transition: all 0.2s; display: flex; align-items: center; justify-content: center;
+  }
+  .fab:hover { transform: scale(1.08); background: var(--verde-medio); }
+
+  /* ── SEÇÃO TÍTULO ── */
+  .sec-titulo {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px; color: var(--verde-escuro);
+    margin-top: 24px; margin-bottom: 4px;
+  }
+  .sec-sub { font-size: 12px; color: var(--texto-claro); }
+
+  /* ── RESUMO RÁPIDO ── */
+  .resumo-row {
+    display: flex; gap: 10px; margin-top: 16px;
+  }
+  .resumo-pill {
+    flex: 1; background: var(--branco); border-radius: 14px; padding: 14px 12px;
+    text-align: center; border: 1px solid rgba(127,184,154,0.2);
+    box-shadow: 0 2px 8px rgba(45,74,62,0.05);
+  }
+  .resumo-num { font-family: 'Playfair Display', serif; font-size: 26px; color: var(--verde-escuro); }
+  .resumo-txt { font-size: 10px; color: var(--texto-claro); margin-top: 2px; }
+
+  .frase-dia {
+    margin-top: 16px; padding: 18px;
+    background: linear-gradient(135deg, var(--verde-escuro), var(--verde-medio));
+    border-radius: 18px; color: white;
+  }
+  .frase-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; opacity: 0.7; margin-bottom: 6px; }
+  .frase-texto { font-family: 'Playfair Display', serif; font-style: italic; font-size: 15px; line-height: 1.5; }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed; bottom: 92px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: var(--verde-escuro); color: white; border-radius: 20px;
+    padding: 10px 20px; font-size: 13px; opacity: 0; z-index: 300;
+    transition: all 0.3s; pointer-events: none; white-space: nowrap;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  .ornamento {
+    position: fixed; pointer-events: none; z-index: 0; opacity: 0.06;
+    font-size: 200px; color: var(--verde-escuro);
+  }
+  .ornamento-1 { top: -40px; right: -30px; transform: rotate(15deg); }
+  .ornamento-2 { bottom: 80px; left: -60px; transform: rotate(-20deg); }
+</style>
+</head>
+<body>
+
+<div class="ornamento ornamento-1">🌿</div>
+<div class="ornamento ornamento-2">🌱</div>
+
+<header>
+  <span class="header-tag">✦ seu espaço de crescimento</span>
+  <h1 class="header-titulo">Jardim<br>de Produtividade</h1>
+  <p class="header-sub">Cuide da sua rotina como cuida de uma planta</p>
+  <div class="header-data">
+    <span class="data-pill" id="data-hoje">carregando...</span>
+    <span class="energia-pill" id="energia-btn" onclick="ajustarEnergia()">⚡ Energia: 7/10</span>
+  </div>
+</header>
+
+<nav>
+  <div class="nav-scroll">
+    <button class="nav-btn ativo" onclick="ir('inicio')">🏡 Início</button>
+    <button class="nav-btn" onclick="ir('rotina')">📅 Rotina</button>
+    <button class="nav-btn" onclick="ir('habitos')">🌱 Hábitos</button>
+    <button class="nav-btn" onclick="ir('tarefas')">✅ Tarefas</button>
+    <button class="nav-btn" onclick="ir('estudos')">📚 Estudos</button>
+    <button class="nav-btn" onclick="ir('evolucao')">🌳 Evolução</button>
+  </div>
+</nav>
+
+<main>
+
+<!-- ════════════ INÍCIO ════════════ -->
+<section id="sec-inicio" class="secao ativa">
+
+  <div class="frase-dia">
+    <div class="frase-label">✦ intenção do dia</div>
+    <div class="frase-texto" id="frase-dia">"Cada pequeno passo cultivado hoje é a raiz do amanhã que você imagina."</div>
+  </div>
+
+  <div class="resumo-row">
+    <div class="resumo-pill">
+      <div class="resumo-num" id="cnt-feitas">0</div>
+      <div class="resumo-txt">tarefas feitas</div>
+    </div>
+    <div class="resumo-pill">
+      <div class="resumo-num" id="cnt-habitos">0%</div>
+      <div class="resumo-txt">hábitos hoje</div>
+    </div>
+    <div class="resumo-pill">
+      <div class="resumo-num">2h</div>
+      <div class="resumo-txt">estudo/dia</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-titulo">
+      <div class="card-icon" style="background:var(--verde-palido);">✅</div>
+      Tarefas de hoje
+    </div>
+    <div id="lista-hoje"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-titulo">
+      <div class="card-icon" style="background:var(--bege-claro);">🌱</div>
+      Hábitos de hoje
+    </div>
+    <div id="habitos-hoje"></div>
+  </div>
+
+</section>
+
+<!-- ════════════ ROTINA ════════════ -->
+<section id="sec-rotina" class="secao">
+  <p class="sec-titulo">Seu dia, hora a hora</p>
+  <p class="sec-sub">Segunda a sexta — rotina estruturada</p>
+
+  <div class="card" style="padding-top:18px; padding-bottom:18px;">
+    <div id="lista-rotina"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-titulo">
+      <div class="card-icon" style="background:#e8eaf6;">📚</div>
+      Plano de estudos semanal
+    </div>
+    <div id="plano-estudos"></div>
+  </div>
+</section>
+
+<!-- ════════════ HÁBITOS ════════════ -->
+<section id="sec-habitos" class="secao">
+  <p class="sec-titulo">Sementes diárias</p>
+  <p class="sec-sub">Marque seu hábito tocando no dia da semana</p>
+  <div id="lista-habitos"></div>
+</section>
+
+<!-- ════════════ TAREFAS ════════════ -->
+<section id="sec-tarefas" class="secao">
+  <p class="sec-titulo">O que precisa crescer</p>
+  <p class="sec-sub">Adicione e organize suas tarefas</p>
+
+  <div class="add-form">
+    <input class="add-input" id="nova-tarefa-input" placeholder="✍️ Nova tarefa...">
+    <div class="add-row">
+      <select class="add-select" id="nova-tarefa-area">
+        <option value="trabalho">💼 Trabalho</option>
+        <option value="casa">🏡 Casa</option>
+        <option value="saude">🌿 Saúde</option>
+        <option value="estudos">📚 Estudos</option>
+      </select>
+      <select class="add-select" id="nova-tarefa-prio">
+        <option value="alta">🔴 Alta</option>
+        <option value="media">🟡 Média</option>
+        <option value="baixa">🟢 Baixa</option>
+      </select>
+      <button class="add-btn" onclick="adicionarTarefa()">+ Adicionar</button>
+    </div>
+  </div>
+
+  <div class="card" id="card-tarefas">
+    <div class="card-titulo">
+      <div class="card-icon" style="background:var(--verde-palido);">📋</div>
+      Todas as tarefas
+    </div>
+    <div id="lista-tarefas"></div>
+  </div>
+</section>
+
+<!-- ════════════ ESTUDOS ════════════ -->
+<section id="sec-estudos" class="secao">
+  <p class="sec-titulo">Aprendizado em flor</p>
+  <p class="sec-sub">Automações · Gestão · Agentes de IA</p>
+  <div id="lista-estudos"></div>
+</section>
+
+<!-- ════════════ EVOLUÇÃO ════════════ -->
+<section id="sec-evolucao" class="secao">
+  <p class="sec-titulo">Seu crescimento</p>
+  <p class="sec-sub">Visão do que você está construindo</p>
+
+  <div class="evolucao-semana" id="evo-nums"></div>
+
+  <div class="card" style="margin-top:16px;">
+    <div class="card-titulo">
+      <div class="card-icon" style="background:var(--bege-claro);">🌳</div>
+      Habilidades em cultivo
+    </div>
+    <div id="lista-skills"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-titulo">
+      <div class="card-icon" style="background:var(--verde-palido);">💬</div>
+      Minha intenção de vida
+    </div>
+    <textarea id="intencao-txt" placeholder="Escreva aqui seus objetivos maiores, o que você está construindo e por quê..." style="width:100%;border:none;outline:none;resize:none;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--texto-medio);background:transparent;min-height:100px;line-height:1.6;" oninput="salvarIntencao()"></textarea>
+  </div>
+</section>
+
+</main>
+
+<button class="fab" onclick="fabAcao()">+</button>
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── DADOS ───────────────────────────────────────────────────────────────────
+const DIAS_SEMANA = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+const DIAS_FULL   = ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
+
+let dados = JSON.parse(localStorage.getItem('jardim_dados') || 'null') || {
+  tarefas: [
+    { id:1, nome:"Treino matinal 💪", area:"saude",   prio:"alta",  feita:false },
+    { id:2, nome:"Bloco de estudos — Automações", area:"estudos", prio:"alta",  feita:false },
+    { id:3, nome:"Organizar cozinha", area:"casa",   prio:"media", feita:false },
+    { id:4, nome:"Revisar tarefas do trabalho", area:"trabalho", prio:"alta", feita:false },
+  ],
+  habitos: {
+    "⏰ Acordar 05h":    { meta:5, dias:{} },
+    "🏋️ Treino":         { meta:5, dias:{} },
+    "📚 Estudos 20h":    { meta:5, dias:{} },
+    "😴 Dormir 22h30":   { meta:5, dias:{} },
+    "🍽️ Alimentação":    { meta:7, dias:{} },
+    "💧 Hidratação 2L":  { meta:7, dias:{} },
+  },
+  skills: [
+    { nome:"🤖 Automações (n8n/Make)", atual:3, meta:8, horas:0 },
+    { nome:"📊 Gestão de Tráfego",    atual:2, meta:7, horas:0 },
+    { nome:"🧠 Agentes de IA",        atual:2, meta:8, horas:0 },
+    { nome:"📋 Gestão Geral",         atual:5, meta:9, horas:0 },
+  ],
+  energia: 7,
+  intencao: "",
+};
+
+function salvar() { localStorage.setItem('jardim_dados', JSON.stringify(dados)); }
+
+// ─── DATA ─────────────────────────────────────────────────────────────────────
+const hoje = new Date();
+const hojeStr = hoje.toLocaleDateString('pt-BR', { weekday:'long', day:'numeric', month:'long' });
+document.getElementById('data-hoje').textContent = hojeStr.charAt(0).toUpperCase() + hojeStr.slice(1);
+const diaIdx = hoje.getDay(); // 0=dom
+const semanaKey = getWeekKey();
+
+function getWeekKey() {
+  const d = new Date(hoje);
+  d.setHours(0,0,0,0);
+  d.setDate(d.getDate() - d.getDay());
+  return d.toISOString().slice(0,10);
+}
+
+// ─── NAVEGAÇÃO ────────────────────────────────────────────────────────────────
+let secAtual = 'inicio';
+function ir(id) {
+  document.querySelectorAll('.secao').forEach(s => s.classList.remove('ativa'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('ativo'));
+  document.getElementById('sec-'+id).classList.add('ativa');
+  [...document.querySelectorAll('.nav-btn')].find(b => b.textContent.toLowerCase().includes(id.slice(0,3)))?.classList.add('ativo');
+  secAtual = id;
+  renderSecao(id);
+}
+
+function renderSecao(id) {
+  if(id==='inicio')   renderInicio();
+  if(id==='rotina')   renderRotina();
+  if(id==='habitos')  renderHabitos();
+  if(id==='tarefas')  renderTarefas();
+  if(id==='estudos')  renderEstudos();
+  if(id==='evolucao') renderEvolucao();
+}
+
+// ─── INÍCIO ───────────────────────────────────────────────────────────────────
+function renderInicio() {
+  // resumo
+  const feitas = dados.tarefas.filter(t=>t.feita).length;
+  document.getElementById('cnt-feitas').textContent = feitas;
+  const habitosHoje = Object.values(dados.habitos).filter(h=> h.dias[semanaKey+'-'+diaIdx] === 'feito');
+  const totalHab = Object.keys(dados.habitos).length;
+  document.getElementById('cnt-habitos').textContent = Math.round(habitosHoje.length/totalHab*100)+'%';
+
+  // tarefas de hoje (primeiras 4 não feitas + feitas)
+  const el = document.getElementById('lista-hoje');
+  const pendentes = dados.tarefas.filter(t=>!t.feita).slice(0,3);
+  const feitas_list = dados.tarefas.filter(t=>t.feita).slice(0,1);
+  el.innerHTML = '';
+  [...pendentes,...feitas_list].forEach(t => {
+    el.innerHTML += tarefaHTML(t, true);
+  });
+  if(dados.tarefas.filter(t=>!t.feita).length===0){
+    el.innerHTML = '<p style="text-align:center;color:var(--verde-medio);padding:16px;font-size:14px;">🌿 Tudo cultivado hoje!</p>';
+  }
+
+  // hábitos de hoje
+  const el2 = document.getElementById('habitos-hoje');
+  el2.innerHTML = '';
+  Object.entries(dados.habitos).forEach(([nome, h]) => {
+    const key = semanaKey+'-'+diaIdx;
+    const est = h.dias[key];
+    const cor = est==='feito'?'var(--verde-medio)': est==='nao'?'#e57373':'var(--verde-suave)';
+    const emoji = est==='feito'?'✅': est==='nao'?'❌':'○';
+    el2.innerHTML += `
+      <div class="tarefa-item" onclick="toggleHabitoHoje('${nome.replace(/'/g,"\\'")}')">
+        <div class="tarefa-check ${est==='feito'?'marcado':''}" style="${est==='feito'?'':''}">
+          ${est==='feito'?'✓':''}
+        </div>
+        <div class="tarefa-texto">
+          <div class="tarefa-nome ${est==='feito'?'riscado':''}">${nome}</div>
+          <div class="tarefa-meta">Toque para marcar</div>
+        </div>
+      </div>`;
+  });
+}
+
+function toggleHabitoHoje(nome) {
+  const key = semanaKey+'-'+diaIdx;
+  const est = dados.habitos[nome]?.dias[key];
+  if(!dados.habitos[nome]) return;
+  dados.habitos[nome].dias[key] = est==='feito' ? undefined : 'feito';
+  if(!dados.habitos[nome].dias[key]) delete dados.habitos[nome].dias[key];
+  salvar(); renderInicio();
+  toast(est==='feito'?'Desmarcado':'✅ Hábito cultivado!');
+}
+
+// ─── ROTINA ───────────────────────────────────────────────────────────────────
+const rotina = [
+  { h:"05:00 – 05:30", a:"⏰ Acordar e se organizar",   d:"Higiene, separar roupas, preparar para sair", cor:"" },
+  { h:"05:30 – 07:00", a:"🏋️ Treino",                   d:"Sair de casa às 05h30", cor:"rotina-cor-saude" },
+  { h:"07:00 – 07:30", a:"☕ Chegada + café",            d:"Aproveite para ouvir algo enquanto se desloca", cor:"" },
+  { h:"07:30 – 12:00", a:"💼 Trabalho — foco máximo",   d:"Tarefas cognitivas pesadas aqui", cor:"rotina-cor-trabalho" },
+  { h:"12:00 – 13:00", a:"🍽️ Almoço e pausa",           d:"Saia da tela — recarregue de verdade", cor:"" },
+  { h:"13:00 – 18:00", a:"💼 Trabalho — tarde",         d:"Reuniões e operacional", cor:"rotina-cor-trabalho" },
+  { h:"18:00 – 19:00", a:"🚌 Deslocamento para casa",   d:"Ouvir aulas ou podcasts de gestão", cor:"" },
+  { h:"19:00 – 19:30", a:"🍽️ Jantar + cozinha",         d:"Prepare com antecedência para ganhar tempo", cor:"" },
+  { h:"19:30 – 20:00", a:"🛁 Banho + transição mental", d:"Desligue do trabalho antes dos estudos", cor:"rotina-cor-saude" },
+  { h:"20:00 – 22:00", a:"📚 Bloco de estudos",         d:"🔒 Sagrado — sem redes sociais!", cor:"rotina-cor-estudos" },
+  { h:"22:00 – 22:15", a:"🌙 Desacelerar",              d:"Sem tela intensa — leitura leve ou respiração", cor:"" },
+  { h:"22:15 – 22:30", a:"😴 Hora de dormir",           d:"Meta: 7h de sono → acordar às 05h", cor:"" },
+];
+
+const planoEstudos = [
+  { dia:"Segunda",  foco:"🤖 Automações",       desc:"n8n, Zapier, Make" },
+  { dia:"Terça",    foco:"📊 Gestão + Tráfego", desc:"Métricas, estratégia, Meta" },
+  { dia:"Quarta",   foco:"🧠 Agentes de IA",    desc:"Implementar no trabalho" },
+  { dia:"Quinta",   foco:"🔁 Revisão",           desc:"Praticar o que aprendeu" },
+  { dia:"Sexta",    foco:"🎯 Livre",             desc:"Revisar, testar ou descansar" },
+];
+
+function renderRotina() {
+  const el = document.getElementById('lista-rotina');
+  el.innerHTML = rotina.map((r,i) => `
+    <div class="rotina-item ${r.cor}">
+      <div class="rotina-hora">${r.h}</div>
+      <div class="rotina-linha">
+        <div class="rotina-dot"></div>
+        ${i < rotina.length-1 ? '<div class="rotina-linha-v"></div>' : ''}
+      </div>
+      <div class="rotina-corpo">
+        <div class="rotina-ativ">${r.a}</div>
+        <div class="rotina-detalhe">${r.d}</div>
+      </div>
+    </div>
+  `).join('');
+
+  const el2 = document.getElementById('plano-estudos');
+  el2.innerHTML = planoEstudos.map((p,i) => `
+    <div class="tarefa-item">
+      <div style="min-width:68px;font-size:12px;color:var(--texto-claro);font-weight:500;">${p.dia}</div>
+      <div class="tarefa-texto">
+        <div class="tarefa-nome">${p.foco}</div>
+        <div class="tarefa-meta">${p.desc}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ─── HÁBITOS ─────────────────────────────────────────────────────────────────
+function renderHabitos() {
+  const el = document.getElementById('lista-habitos');
+  el.innerHTML = '';
+  Object.entries(dados.habitos).forEach(([nome, h]) => {
+    const feitos = Object.values(h.dias).filter(v=>v==='feito').length;
+    const total  = Object.keys(h.dias).length || 1;
+    // contar semana atual
+    let feitosSem = 0;
+    for(let d=0;d<7;d++){
+      if(h.dias[semanaKey+'-'+d]==='feito') feitosSem++;
+    }
+    const pct = Math.round(feitosSem/h.meta*100);
+    el.innerHTML += `
+      <div class="habito-card">
+        <div class="habito-topo">
+          <div class="habito-nome">${nome}</div>
+          <div class="habito-pct">${pct}% da meta</div>
+        </div>
+        <div class="dias-row">
+          ${DIAS_SEMANA.map((d,i) => {
+            const key = semanaKey+'-'+i;
+            const est = h.dias[key];
+            return `<button class="dia-btn ${est==='feito'?'feito':est==='nao'?'nao-feito':''}"
+              onclick="toggleHabito('${nome.replace(/'/g,"\\'")}',${i})">
+              <span>${est==='feito'?'✓':est==='nao'?'✗':'·'}</span>
+              <span class="dia-label">${d}</span>
+            </button>`;
+          }).join('')}
+        </div>
+        <div class="barra-progresso">
+          <div class="barra-fill" style="width:${Math.min(pct,100)}%"></div>
+        </div>
+      </div>`;
+  });
+}
+
+function toggleHabito(nome, diaI) {
+  const key = semanaKey+'-'+diaI;
+  const est = dados.habitos[nome]?.dias[key];
+  if(!dados.habitos[nome]) return;
+  if(est==='feito')      dados.habitos[nome].dias[key]='nao';
+  else if(est==='nao')   delete dados.habitos[nome].dias[key];
+  else                   dados.habitos[nome].dias[key]='feito';
+  salvar(); renderHabitos();
+}
+
+// ─── TAREFAS ─────────────────────────────────────────────────────────────────
+let nextId = dados.tarefas.reduce((m,t)=>Math.max(m,t.id),0)+1;
+
+function tarefaHTML(t, mini=false) {
+  const badgeClass = {trabalho:'badge-trabalho',casa:'badge-casa',saude:'badge-saude',estudos:'badge-estudos'}[t.area]||'';
+  const badgeLabel = {trabalho:'💼 Trabalho',casa:'🏡 Casa',saude:'🌿 Saúde',estudos:'📚 Estudos'}[t.area]||t.area;
+  return `
+    <div class="tarefa-item" id="tarefa-${t.id}">
+      <div class="tarefa-check ${t.feita?'marcado':''}" onclick="toggleTarefa(${t.id})">
+        ${t.feita?'✓':''}
+      </div>
+      <div class="tarefa-texto">
+        <div class="tarefa-nome ${t.feita?'riscado':''}">${t.nome}</div>
+        ${!mini?`<div class="tarefa-meta">
+          <span class="tarefa-badge ${badgeClass}">${badgeLabel}</span>
+        </div>`:''}
+      </div>
+      ${!mini?`<span style="font-size:18px;cursor:pointer;color:var(--texto-claro);padding:4px;" onclick="removerTarefa(${t.id})">×</span>`:''}
+    </div>`;
+}
+
+function renderTarefas() {
+  const el = document.getElementById('lista-tarefas');
+  if(!dados.tarefas.length) {
+    el.innerHTML = '<p style="text-align:center;color:var(--texto-claro);padding:20px;font-size:14px;">🌱 Nenhuma tarefa ainda.<br>Adicione sua primeira acima!</p>';
+    return;
+  }
+  const pend = dados.tarefas.filter(t=>!t.feita);
+  const feit = dados.tarefas.filter(t=>t.feita);
+  el.innerHTML = pend.map(t=>tarefaHTML(t)).join('')
+    + (feit.length?`<div style="padding:10px 0 4px;font-size:11px;color:var(--texto-claro);letter-spacing:1px;">CONCLUÍDAS</div>`:'')
+    + feit.map(t=>tarefaHTML(t)).join('');
+}
+
+function toggleTarefa(id) {
+  const t = dados.tarefas.find(t=>t.id===id);
+  if(t){ t.feita=!t.feita; salvar(); renderTarefas(); renderInicio(); }
+  toast(t?.feita?'✅ Tarefa concluída!':'Reaberta');
+}
+
+function removerTarefa(id) {
+  dados.tarefas = dados.tarefas.filter(t=>t.id!==id);
+  salvar(); renderTarefas(); renderInicio();
+  toast('🌿 Tarefa removida');
+}
+
+function adicionarTarefa() {
+  const nome = document.getElementById('nova-tarefa-input').value.trim();
+  if(!nome) return;
+  dados.tarefas.push({ id: nextId++, nome, area: document.getElementById('nova-tarefa-area').value, prio: document.getElementById('nova-tarefa-prio').value, feita: false });
+  document.getElementById('nova-tarefa-input').value = '';
+  salvar(); renderTarefas(); renderInicio();
+  toast('🌱 Tarefa adicionada!');
+}
+document.getElementById('nova-tarefa-input').addEventListener('keydown', e => { if(e.key==='Enter') adicionarTarefa(); });
+
+// ─── ESTUDOS ──────────────────────────────────────────────────────────────────
+const estudosData = [
+  { titulo:"Introdução ao n8n",          area:"🤖 Automações",      fonte:"YouTube / n8n.io",    cor:"#e8f4ea", barCor:"#4a7c68", pct:0 },
+  { titulo:"Fluxos básicos de automação",area:"🤖 Automações",      fonte:"YouTube / Udemy",     cor:"#e8f4ea", barCor:"#4a7c68", pct:0 },
+  { titulo:"Tráfego pago — fundamentos", area:"📊 Gestão/Tráfego",  fonte:"Meta Blueprint",      cor:"#fef3c7", barCor:"#d97706", pct:0 },
+  { titulo:"Google Ads básico",          area:"📊 Gestão/Tráfego",  fonte:"Google Skillshop",    cor:"#fef3c7", barCor:"#d97706", pct:0 },
+  { titulo:"Introdução a agentes de IA", area:"🧠 Agentes IA",      fonte:"YouTube / Docs",      cor:"#ede9fe", barCor:"#7c3aed", pct:0 },
+  { titulo:"Prompt engineering avançado",area:"🧠 Agentes IA",      fonte:"Anthropic / OpenAI",  cor:"#ede9fe", barCor:"#7c3aed", pct:0 },
+];
+
+function renderEstudos() {
+  const el = document.getElementById('lista-estudos');
+  el.innerHTML = estudosData.map((e,i)=>`
+    <div class="estudo-card">
+      <div class="estudo-cabecalho">
+        <div class="estudo-icone" style="background:${e.cor};">
+          ${e.area.slice(0,2)}
+        </div>
+        <div class="estudo-info">
+          <div class="estudo-titulo">${e.titulo}</div>
+          <div class="estudo-sub">${e.area} · ${e.fonte}</div>
+        </div>
+      </div>
+      <div class="estudo-rodape">
+        <input type="range" min="0" max="100" value="${e.pct}"
+          style="width:100%;accent-color:${e.barCor};cursor:pointer;"
+          oninput="atualizarEstudo(${i}, this.value)">
+        <div class="estudo-nums">
+          <span>Progresso</span>
+          <span id="estudo-pct-${i}">${e.pct}%</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function atualizarEstudo(i, val) {
+  estudosData[i].pct = parseInt(val);
+  document.getElementById('estudo-pct-'+i).textContent = val+'%';
+}
+
+// ─── EVOLUÇÃO ─────────────────────────────────────────────────────────────────
+function renderEvolucao() {
+  const feitas = dados.tarefas.filter(t=>t.feita).length;
+  const total  = dados.tarefas.length;
+  let feitosSem = 0, totalPoss = 0;
+  Object.values(dados.habitos).forEach(h => {
+    for(let d=0;d<7;d++) if(h.dias[semanaKey+'-'+d]==='feito') feitosSem++;
+    totalPoss += h.meta;
+  });
+  const pctHab = totalPoss>0?Math.round(feitosSem/totalPoss*100):0;
+
+  document.getElementById('evo-nums').innerHTML = `
+    <div class="evo-card"><div class="evo-num">${feitas}</div><div class="evo-label">tarefas feitas</div></div>
+    <div class="evo-card"><div class="evo-num">${pctHab}%</div><div class="evo-label">hábitos semana</div></div>
+    <div class="evo-card"><div class="evo-num">${feitosSem}</div><div class="evo-label">hábitos feitos</div></div>
+    <div class="evo-card"><div class="evo-num">${total-feitas}</div><div class="evo-label">tarefas abertas</div></div>
+  `;
+
+  const el = document.getElementById('lista-skills');
+  el.innerHTML = dados.skills.map((s,i)=>`
+    <div class="skill-item">
+      <div class="skill-topo">
+        <div class="skill-nome">${s.nome}</div>
+        <div class="skill-nivel">Nível ${s.atual}/10</div>
+      </div>
+      <div class="skill-barra">
+        <div class="skill-fill" style="width:${s.atual/10*100}%"></div>
+      </div>
+      <div style="margin-top:8px;display:flex;gap:8px;align-items:center;">
+        <span style="font-size:11px;color:var(--texto-claro);">Avançar nível:</span>
+        <button onclick="subirSkill(${i},-1)" style="background:var(--bege-claro);border:none;border-radius:8px;padding:3px 10px;cursor:pointer;font-size:14px;">−</button>
+        <button onclick="subirSkill(${i},1)"  style="background:var(--verde-palido);border:none;border-radius:8px;padding:3px 10px;cursor:pointer;font-size:14px;color:var(--verde-escuro);">+</button>
+      </div>
+    </div>
+  `).join('');
+
+  document.getElementById('intencao-txt').value = dados.intencao || '';
+}
+
+function subirSkill(i, delta) {
+  dados.skills[i].atual = Math.max(1, Math.min(10, dados.skills[i].atual + delta));
+  salvar(); renderEvolucao();
+  toast(delta>0?'🌱 Habilidade evoluída!':'Ajustado');
+}
+
+function salvarIntencao() {
+  dados.intencao = document.getElementById('intencao-txt').value;
+  salvar();
+}
+
+// ─── ENERGIA ─────────────────────────────────────────────────────────────────
+function ajustarEnergia() {
+  const n = prompt('Qual seu nível de energia agora? (1 a 10)', dados.energia);
+  if(n && !isNaN(n)) {
+    dados.energia = Math.max(1,Math.min(10,parseInt(n)));
+    document.getElementById('energia-btn').textContent = '⚡ Energia: '+dados.energia+'/10';
+    salvar(); toast('⚡ Energia atualizada!');
+  }
+}
+document.getElementById('energia-btn').textContent = '⚡ Energia: '+dados.energia+'/10';
+
+// ─── FAB ──────────────────────────────────────────────────────────────────────
+function fabAcao() {
+  if(secAtual==='tarefas') { document.getElementById('nova-tarefa-input').focus(); }
+  else { ir('tarefas'); setTimeout(()=>document.getElementById('nova-tarefa-input').focus(),400); }
+}
+
+// ─── TOAST ────────────────────────────────────────────────────────────────────
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'), 2200);
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+renderInicio();
+</script>
+</body>
+</html>
